@@ -1,6 +1,15 @@
-# To run a tests file
+# How to run tests ?
+
+### In non-django apps
 ```shell
 ╰─ python -m unittest [filename].py
+```
+
+### Inside a django app:
+```shell
+╰─ python ./manage.py test 
+# To run tests from specific app
+╰─ python ./manage.py test products 
 ```
 
 # Example to a unit test using `unittest` pkg:
