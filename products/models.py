@@ -28,3 +28,19 @@ class Product(models.Model):
         if not (0 <= discount_percentage <= 100):
             raise ValueError('Discount percentage must be between 0 and 100.')
         return self.price * (1 - (discount_percentage / 100))
+
+    # TODO: in django to define a database constraint over this model, you have to define them in the Meta class
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(price__gt=0),
+                name='price_gt_0'
+            ),
+            models.CheckConstraint(
+                check=models.Q(stock__gte =0),
+                name='stock_gte_0'
+            )
+        ]
+
+    def __str__(self):
+        return self.name

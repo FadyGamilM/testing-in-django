@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 from ..models import Product, User
+from django.db.utils import IntegrityError
+from django.db import transaction
 
 
 class TestProductsModel(TestCase):
@@ -33,3 +35,14 @@ class TestProductsModel(TestCase):
         self.product.stock = -1
         with self.assertRaises(ValidationError):
             self.product.full_clean()
+
+    def test_integrity_constraints(self):
+        self.product.price = -1
+        self.product.stock = -1
+        with transaction.atomic():
+            with self.assertRaises(IntegrityError):
+                self.product.save()
+
+        with transaction.atomic():
+            with self.assertRaises(IntegrityError):
+                self.product.save()
